@@ -8,6 +8,8 @@ import (
 // CreateTask
 func CreateTask(w http.ResponseWriter, r *http.Request) {
 
+	logger.Println("Create Task endpoint hit")
+
 	var newTask Task
 	err := json.NewDecoder(r.Body).Decode(&newTask)
 	if err != nil {
@@ -23,6 +25,8 @@ func CreateTask(w http.ResponseWriter, r *http.Request) {
 
 // get task through description
 func GetTask(w http.ResponseWriter, r *http.Request) {
+
+	logger.Println("Read task endpoint hit")
 	description := r.URL.Query().Get("description")
 	if description == "" {
 		http.Error(w, "Please provide a task description", http.StatusBadRequest)
@@ -44,6 +48,7 @@ func GetTask(w http.ResponseWriter, r *http.Request) {
 
 func UpdateTask(w http.ResponseWriter, r *http.Request) {
 
+	logger.Println("Update task endpoint hit")
 	var updatedTask Task
 	err := json.NewDecoder(r.Body).Decode(&updatedTask)
 	if err != nil {
@@ -74,6 +79,8 @@ func UpdateTask(w http.ResponseWriter, r *http.Request) {
 
 func DeleteTask(w http.ResponseWriter, r *http.Request) {
 
+	logger.Println("Delete task endpoint hit")
+
 	description := r.URL.Query().Get("description")
 	if description == "" {
 		http.Error(w, "Please provide a task description", http.StatusBadRequest)
@@ -94,9 +101,9 @@ func DeleteTask(w http.ResponseWriter, r *http.Request) {
 	http.Error(w, "Task not found", http.StatusNotFound)
 }
 
-// helathCheck status 
-
 func HealthCheck(w http.ResponseWriter, r *http.Request) {
+
+	logger.Println("HealthCheck task endpoint hit")
 
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("Serivce is healthy\n"))
