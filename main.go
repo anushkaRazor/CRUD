@@ -7,8 +7,8 @@ import (
 
 func main() {
 
-	// Log()
-	// logger.Println("Logger initialized")
+	Log()
+	logger.Println("Logger initialized")
 
 	http.HandleFunc("/create", CreateTask)
 	http.HandleFunc("/read", GetTask)
