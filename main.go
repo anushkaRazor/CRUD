@@ -2,18 +2,20 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 )
 
 func main() {
 
-	Log()
+	// Log()
+	// logger.Println("Logger initialized")
+
 	http.HandleFunc("/create", CreateTask)
 	http.HandleFunc("/read", GetTask)
 	http.HandleFunc("/update", UpdateTask)
 	http.HandleFunc("/delete", DeleteTask)
+	http.HandleFunc("/ping", HealthCheck)
 
 	fmt.Println("Server started at http://localhost:8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	http.ListenAndServe(":8080", nil)
 }
