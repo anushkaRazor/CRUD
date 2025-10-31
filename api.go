@@ -17,8 +17,10 @@ func CreateTask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	mutex.Lock()
 	tasks = append(tasks, newTask)
-
+	mutex.Unlock()
+ 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]string{"message": "Task created successfully!"})
 }
@@ -33,6 +35,8 @@ func GetTask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	mutex.RLock()
+	defer mutex.RUnlock()
 	for _, t := range tasks {
 		if t.Description == description {
 			w.Header().Set("Content-Type", "application/json")
@@ -55,6 +59,9 @@ func UpdateTask(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid JSON data", http.StatusBadRequest)
 		return
 	}
+
+	mutex.Lock()
+	defer mutex.Unlock()
 
 	for i := range tasks {
 		if tasks[i].Description == updatedTask.Description {
@@ -87,6 +94,8 @@ func DeleteTask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	mutex.Lock()
+	defer mutex.Unlock()
 	for i, t := range tasks {
 		if t.Description == description {
 
