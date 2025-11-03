@@ -75,7 +75,7 @@ func UpdateTask(w http.ResponseWriter, r *http.Request) {
 
 			task.Tasks[i].IsCompleted = updatedTask.IsCompleted
 
-			w.Header().Set("Content-Type", "application/json")git
+			w.Header().Set("Content-Type", "application/json")
 			json.NewEncoder(w).Encode(map[string]string{"message": "Task updated successfully!"})
 			return
 		}
