@@ -1,0 +1,2 @@
+TASK-LOG : 2025/11/03 12:03:20 log.go:26: Log initialized successfully
+TASK-LOG : 2025/11/03 12:03:20 main.go:25: Logger initialized

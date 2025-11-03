@@ -1,0 +1,13 @@
+version : '3.9'
+services:
+app:
+container_name: todo
+build: .
+ports: 
+- "8080:8080"
+environemnt:
+- PORT=8080
+- LOG_FILE_PATH = /app/logs/app.log
+volumes:
+- ./logs:/app/logs 
+restart: always 

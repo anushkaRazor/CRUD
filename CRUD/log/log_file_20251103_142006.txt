@@ -1,0 +1,6 @@
+TASK-LOG : 2025/11/03 14:20:06 log.go:28: Log initialized successfully
+TASK-LOG : 2025/11/03 14:20:13 api.go:91: Delete task endpoint hit
+TASK-LOG : 2025/11/03 14:20:42 api.go:91: Delete task endpoint hit
+TASK-LOG : 2025/11/03 14:21:31 api.go:91: Delete task endpoint hit
+TASK-LOG : 2025/11/03 14:40:08 api.go:126: HealthCheck task endpoint hit
+TASK-LOG : 2025/11/03 14:41:23 api.go:13: Create Task endpoint hit

@@ -1,0 +1,8 @@
+TASK-LOG : 2025/10/31 11:13:28 log.go:26: Log initialized successfully
+TASK-LOG : 2025/10/31 11:13:28 main.go:11: Logger initialized
+TASK-LOG : 2025/10/31 11:13:47 api.go:31: Read task endpoint hit
+TASK-LOG : 2025/10/31 11:13:48 api.go:31: Read task endpoint hit
+TASK-LOG : 2025/10/31 11:14:18 api.go:11: Create Task endpoint hit
+TASK-LOG : 2025/10/31 11:14:37 api.go:31: Read task endpoint hit
+TASK-LOG : 2025/10/31 11:15:06 api.go:55: Update task endpoint hit
+TASK-LOG : 2025/10/31 11:15:16 api.go:55: Update task endpoint hit

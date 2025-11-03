@@ -1,0 +1,11 @@
+TASK-LOG : 2025/11/03 16:04:13 log.go:28: Log initialized successfully
+TASK-LOG : 2025/11/03 16:04:18 api.go:33: Read task endpoint hit
+TASK-LOG : 2025/11/03 16:04:25 api.go:126: HealthCheck task endpoint hit
+TASK-LOG : 2025/11/03 16:04:34 api.go:13: Create Task endpoint hit
+TASK-LOG : 2025/11/03 16:04:41 api.go:33: Read task endpoint hit
+TASK-LOG : 2025/11/03 16:09:32 api.go:33: Read task endpoint hit
+TASK-LOG : 2025/11/03 16:09:37 api.go:33: Read task endpoint hit
+TASK-LOG : 2025/11/03 16:09:41 api.go:33: Read task endpoint hit
+TASK-LOG : 2025/11/03 16:09:47 api.go:33: Read task endpoint hit
+TASK-LOG : 2025/11/03 16:10:09 api.go:57: Update task endpoint hit
+TASK-LOG : 2025/11/03 16:19:09 api.go:57: Update task endpoint hit
