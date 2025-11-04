@@ -1,0 +1,5 @@
+TASK-LOG : 2025/11/04 00:19:54 log.go:28: Log initialized successfully
+TASK-LOG : 2025/11/04 00:20:02 api.go:123: Status healthy
+TASK-LOG : 2025/11/04 00:20:30 api.go:51: Task created: {ID:2 Description:Test endpoints IsCompleted:false OwnerId:}
+TASK-LOG : 2025/11/04 00:20:40 api.go:35: Task fetched: {ID:2 Description:Test endpoints IsCompleted:false OwnerId:}
+TASK-LOG : 2025/11/04 00:21:06 api.go:73: Update failed: missing user ID

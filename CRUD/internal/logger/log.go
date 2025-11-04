@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-var Logger *log.Logger
+var L *log.Logger
 
 func Log() {
 
@@ -24,6 +24,6 @@ func Log() {
 		log.Fatalf("Error opening log file:%v", err)
 	}
 
-	Logger = log.New(file, "TASK-LOG : ", log.Ldate|log.Ltime|log.Lshortfile)
-	Logger.Println("Log initialized successfully")
+	L = log.New(file, "TASK-LOG : ", log.Ldate|log.Ltime|log.Lshortfile)
+	L.Println("Log initialized successfully")
 }

@@ -3,129 +3,123 @@ package api
 import (
 	"encoding/json"
 	"net/http"
+
 	"github.com/anushkaRazor/CRUD/internal/logger"
 	"github.com/anushkaRazor/CRUD/internal/task"
 )
 
-// CreateTask
+func respJSON(w http.ResponseWriter, data any, status int) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(status)
+	json.NewEncoder(w).Encode(data)
+}
+
+
+func fetchTask(w http.ResponseWriter, id, user string, checkOwner bool) (task.Task, bool) {
+	task.Mutex.RLock()
+	t, ok := task.Tasks[id]
+	task.Mutex.RUnlock()
+
+	if !ok {
+		logger.L.Printf("Task not found: ID=%s", id)
+		http.Error(w, "Task not found", http.StatusNotFound)
+		return task.Task{}, false
+	}
+
+	if checkOwner && t.OwnerId != user {
+		logger.L.Printf("Unauthorized: task=%+v user=%s", t, user)
+		http.Error(w, "Unauthorized", http.StatusForbidden)
+		return task.Task{}, false
+	}
+
+	logger.L.Printf("Task fetched: %+v", t)
+	return t, true
+}
+
 func CreateTask(w http.ResponseWriter, r *http.Request) {
-
-	logger.Logger.Println("Create Task endpoint hit")
-
-	var newTask task.Task
-	err := json.NewDecoder(r.Body).Decode(&newTask)
-	if err != nil {
-		http.Error(w, "Invalid JSON data", http.StatusBadRequest)
+	var t task.Task
+	if err := json.NewDecoder(r.Body).Decode(&t); err != nil {
+		logger.L.Printf("Create failed: invalid JSON: %v", err)
+		http.Error(w, "Invalid JSON", http.StatusBadRequest)
 		return
 	}
 
 	task.Mutex.Lock()
-	task.Tasks = append(task.Tasks, newTask)
+	task.Tasks[t.ID] = t
 	task.Mutex.Unlock()
 
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]string{"message": "Task created successfully!"})
+	logger.L.Printf("Task created: %+v", t)
+	respJSON(w, map[string]string{"msg": "Created"}, http.StatusOK)
 }
 
-// get task
 func GetTask(w http.ResponseWriter, r *http.Request) {
-
-	logger.Logger.Println("Read task endpoint hit")
-	description := r.URL.Query().Get("description")
-	if description == "" {
-		http.Error(w, "Please provide a task description", http.StatusBadRequest)
+	id := r.URL.Query().Get("id")
+	if id == "" {
+		logger.L.Println("Get failed: missing ID")
+		http.Error(w, "ID required", http.StatusBadRequest)
 		return
 	}
 
-	task.Mutex.RLock()
-	defer task.Mutex.RUnlock()
-	for _, t := range task.Tasks {
-		if t.Description == description {
-			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(t)
-			return
-		}
+	t, ok := fetchTask(w, id, "", false)
+	if !ok {
+		return
 	}
-
-	http.Error(w, "Task not found", http.StatusNotFound)
+	respJSON(w, t, http.StatusOK)
 }
-
-//update
 
 func UpdateTask(w http.ResponseWriter, r *http.Request) {
+	user := r.Header.Get("User-ID")
+	if user == "" {
+		logger.L.Println("Update failed: missing user ID")
+		http.Error(w, "Missing user ID", http.StatusUnauthorized)
+		return
+	}
 
-	logger.Logger.Println("Update task endpoint hit")
-	var updatedTask task.Task
-	err := json.NewDecoder(r.Body).Decode(&updatedTask)
-	if err != nil {
-		http.Error(w, "Invalid JSON data", http.StatusBadRequest)
+	var upd task.Task
+	if err := json.NewDecoder(r.Body).Decode(&upd); err != nil {
+		logger.L.Printf("Update failed: invalid JSON: %v", err)
+		http.Error(w, "Invalid JSON", http.StatusBadRequest)
+		return
+	}
+
+	t, ok := fetchTask(w, upd.ID, user, true)
+	if !ok {
 		return
 	}
 
 	task.Mutex.Lock()
-	defer task.Mutex.Unlock()
+	t.Description = upd.Description
+	t.IsCompleted = upd.IsCompleted
+	task.Tasks[upd.ID] = t
+	task.Mutex.Unlock()
 
-	for i := range task.Tasks {
-		if task.Tasks[i].Description == updatedTask.Description {
-
-			if task.Tasks[i].OwnerId != updatedTask.OwnerId {
-				http.Error(w, "Unauthorized: only the owner can update this task", http.StatusForbidden)
-				return
-			}
-
-			task.Tasks[i].IsCompleted = updatedTask.IsCompleted
-
-			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(map[string]string{"message": "Task updated successfully!"})
-			return
-		}
-	}
-
-	http.Error(w, "Task not found", http.StatusNotFound)
+	logger.L.Printf("Task updated: %+v by user=%s", t, user)
+	respJSON(w, map[string]string{"msg": "Updated"}, http.StatusOK)
 }
-
-//delete
 
 func DeleteTask(w http.ResponseWriter, r *http.Request) {
+	id := r.URL.Query().Get("id")
+	user := r.Header.Get("User-ID")
+	if id == "" || user == "" {
+		logger.L.Printf("Delete failed: missing ID or user (ID=%s, User=%s)", id, user)
+		http.Error(w, "ID and user required", http.StatusBadRequest)
+		return
+	}
 
-	logger.Logger.Println("Delete task endpoint hit")
-	var deletedTask task.Task
-
-	description := r.URL.Query().Get("description")
-	if description == "" {
-		http.Error(w, "Please provide a task description", http.StatusBadRequest)
+	t, ok := fetchTask(w, id, user, true)
+	if !ok {
 		return
 	}
 
 	task.Mutex.Lock()
-	defer task.Mutex.Unlock()
+	delete(task.Tasks, id)
+	task.Mutex.Unlock()
 
-	for i := range task.Tasks {
-		if task.Tasks[i].Description == description {
-
-			if task.Tasks[i].OwnerId != deletedTask.OwnerId {
-				http.Error(w, "Unauthorized: only the owner can delete this task", http.StatusForbidden)
-				return
-			}
-
-			task.Tasks = append(task.Tasks[:i], task.Tasks[i+1:]...)
-
-			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(map[string]string{"message": "Task updated successfully!"})
-			return
-		}
-	}
-
-	http.Error(w, "Task not found", http.StatusNotFound)
+	logger.L.Printf("Task deleted: %+v by user=%s", t, user)
+	respJSON(w, map[string]string{"msg": "Deleted"}, http.StatusOK)
 }
 
-// healthCheck
-
-func HealthCheck(w http.ResponseWriter, r *http.Request) {
-
-	logger.Logger.Println("HealthCheck task endpoint hit")
-
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("Serivce is healthy\n"))
-
+func Health(w http.ResponseWriter, r *http.Request) {
+	logger.L.Println("Status healthy")
+	respJSON(w, map[string]string{"status": "ok"}, http.StatusOK)
 }

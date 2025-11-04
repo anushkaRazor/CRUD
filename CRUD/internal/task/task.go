@@ -3,12 +3,13 @@ package task
 import "sync"
 
 type Task struct {
+	ID          string `json:"id"`
 	Description string `json:"description"`
-	OwnerId     int    `json:"owner_id"`
-	IsCompleted bool   `json:"is_completed"`
+	IsCompleted bool   `json:"isCompleted"`
+	OwnerId     string `json:"ownerId"`
 }
 
 var (
-	Tasks []Task
+	Tasks = make(map[string]Task) 
 	Mutex sync.RWMutex
 )

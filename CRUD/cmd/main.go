@@ -16,7 +16,7 @@ func main() {
 	http.HandleFunc("/read", api.GetTask)
 	http.HandleFunc("/update", api.UpdateTask)
 	http.HandleFunc("/delete", api.DeleteTask)
-	http.HandleFunc("/ping", api.HealthCheck)
+	http.HandleFunc("/ping", api.Health)
 
 	http.HandleFunc("/",func(w http.ResponseWriter, r *http.Request){
 

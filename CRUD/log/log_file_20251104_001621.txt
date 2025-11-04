@@ -1,0 +1,2 @@
+TASK-LOG : 2025/11/04 00:16:21 log.go:28: Log initialized successfully
+TASK-LOG : 2025/11/04 00:16:31 api.go:112: Status is healthy!

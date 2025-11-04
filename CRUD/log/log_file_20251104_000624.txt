@@ -1,0 +1,7 @@
+TASK-LOG : 2025/11/04 00:06:24 log.go:28: Log initialized successfully
+TASK-LOG : 2025/11/04 00:07:35 api.go:45: Task created: {ID:1 Description:Buy groceries IsCompleted:false OwnerId:user1}
+TASK-LOG : 2025/11/04 00:08:12 api.go:31: Fetched task: {ID:1 Description:Buy groceries IsCompleted:false OwnerId:user1}
+TASK-LOG : 2025/11/04 00:09:11 api.go:66: Update failed: missing user ID
+TASK-LOG : 2025/11/04 00:10:21 api.go:31: Fetched task: {ID:1 Description:Buy groceries IsCompleted:false OwnerId:user1}
+TASK-LOG : 2025/11/04 00:10:21 api.go:86: Task updated: {ID:1 Description:Buy groceries and milk IsCompleted:true OwnerId:user1} by user user1
+TASK-LOG : 2025/11/04 00:10:33 api.go:31: Fetched task: {ID:1 Description:Buy groceries and milk IsCompleted:true OwnerId:user1}

@@ -1,0 +1,3 @@
+TASK-LOG : 2025/11/04 00:25:51 log.go:28: Log initialized successfully
+TASK-LOG : 2025/11/04 00:25:55 api.go:51: Task created: {ID:2 Description:Test endpoints IsCompleted:false OwnerId:}
+TASK-LOG : 2025/11/04 00:26:22 api.go:30: Unauthorized: task={ID:2 Description:Test endpoints IsCompleted:false OwnerId:} user=user1
